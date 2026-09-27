@@ -7,7 +7,8 @@
   "scripts": {
     "test": "node test/pyramidMath.test.js",
     "start": "node src/index.js",
-    "visual": "python3 -m http.server 8000"
+    "web": "python3 -m http.server 8000",
+    "dev": "echo 'Run: python3 -m http.server 8000'"
   },
   "keywords": [
     "math",
@@ -15,7 +16,14 @@
     "creative-coding",
     "design-system",
     "visualization",
-    "pyramid"
+    "pyramid",
+    "generative-design"
   ],
-  "license": "MIT"
+  "author": "noemiplatform (Noemi Platform CAP)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/noemiplatform/Pyramid.git"
+  },
+  "homepage": "https://github.com/noemiplatform/Pyramid"
 }

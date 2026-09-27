@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pyramid - Experimental Math & Design System</title>
+    <style>
+        :root {
+            --bg: #0b1020;
+            --bg-light: #0f172a;
+            --panel: #121a2f;
+            --panel-light: #1a2340;
+            --border: #26365b;
+            --text: #e7ecff;
+            --text-muted: #a9b5d0;
+            --accent: #6ae3ff;
+            --accent-green: #7dffb0;
+            --accent-pink: #ff6b9d;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            background: linear-gradient(180deg, #0b1020 0%, #0f172a 100%);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(11, 16, 32, 0.95);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            padding: 16px 0;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 20px 60px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            margin: 0 0 20px;
+            line-height: 1.2;
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-green));
+            color: var(--bg);
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(106, 227, 255, 0.3);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 80px;
+        }
+
+        .feature-card {
+            background: rgba(18, 26, 47, 0.6);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            transition: border-color 0.3s, transform 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            margin: 0 0 12px;
+            font-size: 1.25rem;
+        }
+
+        .feature-card p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .spec-section {
+            background: rgba(18, 26, 47, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+
+        .spec-section h2 {
+            margin-top: 0;
+            font-size: 2rem;
+            margin-bottom: 24px;
+        }
+
+        .rule-box {
+            background: var(--panel-light);
+            border-left: 4px solid var(--accent-green);
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 1rem;
+            margin: 20px 0;
+        }
+
+        .examples {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .example {
+            background: var(--panel);
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .example-expr {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .example-result {
+            color: var(--accent-green);
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .cli-demo {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .cli-input {
+            color: var(--accent-green);
+            margin-bottom: 8px;
+        }
+
+        .cli-output {
+            color: var(--accent);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: rgba(106, 227, 255, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="logo">⬢ Pyramid</div>
+            <ul class="nav-links">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#spec">Spec</a></li>
+                <li><a href="#usage">Usage</a></li>
+                <li><a href="https://github.com/noemiplatform/Pyramid" target="_blank">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="hero">
+            <h1>Pyramid</h1>
+            <p class="tagline">An experimental mathematical system for creative computation and design generation.</p>
+            <a href="#spec" class="cta-button">Explore</a>
+        </section>
+
+        <section id="features" class="features">
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>Experimental Math</h3>
+                <p>A non-standard arithmetic system where equal values double instead of staying the same.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <h3>Visual Patterns</h3>
+                <p>Generate beautiful matrix visualizations and design patterns from mathematical rules.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔧</div>
+                <h3>Developer Tools</h3>
+                <p>CLI, browser visualizer, and API for building with custom math systems.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📐</div>
+                <h3>Formal Spec</h3>
+                <p>Complete mathematical specification and documentation for reproducible research.</p>
+            </div>
+        </section>
+
+        <section id="spec" class="spec-section">
+            <h2>The Rule</h2>
+            <div class="rule-box">
+                if a === b<br>
+                &nbsp;&nbsp;result = 2 * a<br>
+                else<br>
+                &nbsp;&nbsp;result = a * b
+            </div>
+            <p>This simple rule creates a system where self-multiplication always produces growth. It's intentionally non-standard, designed for experimental computation and creative coding.</p>
+            
+            <h3>Examples</h3>
+            <div class="examples">
+                <div class="example">
+                    <div class="example-expr">1 × 1</div>
+                    <div class="example-result">2</div>
+                </div>
+                <div class="example">
+                    <div class="example-expr">2 × 2</div>
+                    <div class="example-result">4</div>
+                </div>
+                <div class="example">
+                    <div class="example-expr">3 × 3</div>
+                    <div class="example-result">6</div>
+                </div>
+                <div class="example">
+                    <div class="example-expr">4 × 5</div>
+                    <div class="example-result">20</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="usage">
+            <h2 class="section-title">Get Started</h2>
+            
+            <div class="grid-2">
+                <div>
+                    <h3>Installation</h3>
+                    <div class="cli-demo">
+                        <div class="cli-input">$ npm install</div>
+                    </div>
+                    <p>Clone the repository and install dependencies.</p>
+                </div>
+                <div>
+                    <h3>Run Tests</h3>
+                    <div class="cli-demo">
+                        <div class="cli-input">$ npm test</div>
+                        <div class="cli-output">Pyramid math tests passed.</div>
+                    </div>
+                    <p>Verify the system works correctly.</p>
+                </div>
+            </div>
+
+            <div class="grid-2" style="margin-top: 60px;">
+                <div>
+                    <h3>CLI Commands</h3>
+                    <div class="cli-demo">
+                        <div class="cli-input">$ node src/index.js multiply 3 3</div>
+                        <div class="cli-output">6</div>
+                        <div class="cli-input" style="margin-top: 12px;">$ node src/index.js table 5</div>
+                        <div class="cli-output">[...]</div>
+                    </div>
+                </div>
+                <div>
+                    <h3>Browser Visualizer</h3>
+                    <div class="cli-demo">
+                        <div class="cli-input">$ python3 -m http.server 8000</div>
+                        <div style="margin-top: 12px; color: var(--text-muted);">Open http://localhost:8000/web/</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section style="margin-top: 80px; text-align: center;">
+            <h2>Use Cases</h2>
+            <div class="features" style="margin-top: 40px;">
+                <div class="feature-card">
+                    <p><strong>Design Systems</strong><br>Generate visual patterns from mathematical rules.</p>
+                </div>
+                <div class="feature-card">
+                    <p><strong>Creative Coding</strong><br>Experiment with alternate computational logic.</p>
+                </div>
+                <div class="feature-card">
+                    <p><strong>Generative Design</strong><br>Create reproducible algorithmic art.</p>
+                </div>
+                <div class="feature-card">
+                    <p><strong>Research</strong><br>Explore non-standard mathematical systems.</p>
+                </div>
+            </div>
+        </section>
+
+        <section style="margin-top: 80px;">
+            <div class="spec-section">
+                <h2>Technology Stack</h2>
+                <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+                    <span class="badge">JavaScript (ES6+)</span>
+                    <span class="badge">Node.js</span>
+                    <span class="badge">HTML/CSS</span>
+                    <span class="badge">VSCode</span>
+                    <span class="badge">Math Engine</span>
+                </div>
+                <p style="margin-top: 20px;">Open source under MIT license.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 noemiplatform (Noemi Platform CAP). Pyramid is an experimental mathematical system.</p>
+    </footer>
+</body>
+</html>
