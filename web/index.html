@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pyramid Visualizer</title>
+    <style>
+      :root {
+        --bg: #0b1020;
+        --panel: #121a2f;
+        --panel-alt: #1a2340;
+        --border: #26365b;
+        --text: #e7ecff;
+        --muted: #a9b5d0;
+        --accent: #6ae3ff;
+        --accent2: #7dffb0;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: linear-gradient(180deg, #0b1020, #0f172a);
+        color: var(--text);
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 32px 20px 64px;
+      }
+
+      h1 {
+        margin-bottom: 8px;
+        font-size: clamp(2rem, 4vw, 3rem);
+      }
+
+      .subtitle {
+        color: var(--muted);
+        margin-bottom: 24px;
+      }
+
+      .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+        background: rgba(18, 26, 47, 0.7);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 24px;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      label {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      input, button {
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        padding: 10px 12px;
+        font-size: 1rem;
+      }
+
+      input {
+        background: var(--panel-alt);
+        color: var(--text);
+      }
+
+      button {
+        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        border: none;
+        color: #06111a;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .grid-panel {
+        background: rgba(18, 26, 47, 0.9);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 18px;
+      }
+
+      .matrix {
+        display: grid;
+        gap: 4px;
+        margin-top: 18px;
+      }
+
+      .cell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        min-width: 42px;
+        border-radius: 8px;
+        color: #0a1220;
+        font-size: 0.82rem;
+        font-weight: 700;
+        border: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .meta {
+        margin-top: 18px;
+        color: var(--muted);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Pyramid Visualizer</h1>
+      <div class="subtitle">Experimental matrix growth based on the Pyramid rule.</div>
+
+      <div class="controls">
+        <div class="field">
+          <label for="size">Grid size</label>
+          <input id="size" type="number" min="1" max="30" value="8" />
+        </div>
+        <div class="field">
+          <label for="mode">Mode</label>
+          <input id="mode" type="text" value="heat" />
+        </div>
+        <div class="field">
+          <button id="renderBtn">Render</button>
+        </div>
+      </div>
+
+      <div class="grid-panel">
+        <div id="matrix" class="matrix"></div>
+        <div class="meta">
+          <span id="dimensionLabel">Dimension: 8</span>
+          <span id="ruleLabel">Rule: if a === b, result = 2a</span>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const buildVisualPattern = (size = 8, mode = 'heat') => {
+        const dimension = Number(size);
+        const output = [];
+
+        for (let row = 0; row <= dimension; row++) {
+          const currentRow = [];
+          for (let col = 0; col <= dimension; col++) {
+            const value = row === col ? 2 * row : row * col;
+            const hue = Math.min(200, value * 10);
+            const color = mode === 'heat'
+              ? `hsl(${hue}, 70%, 58%)`
+              : `rgb(${Math.min(255, value * 10)}, ${Math.min(255, value * 12)}, 150)`;
+
+            currentRow.push({ value, color });
+          }
+          output.push(currentRow);
+        }
+
+        return output;
+      };
+
+      const matrixEl = document.getElementById('matrix');
+      const sizeInput = document.getElementById('size');
+      const modeInput = document.getElementById('mode');
+      const renderBtn = document.getElementById('renderBtn');
+
+      const render = () => {
+        const size = Number(sizeInput.value) || 8;
+        const mode = modeInput.value || 'heat';
+        const pattern = buildVisualPattern(size, mode);
+
+        matrixEl.style.gridTemplateColumns = `repeat(${pattern.length}, minmax(42px, 1fr))`;
+        matrixEl.innerHTML = '';
+
+        for (const row of pattern) {
+          for (const cell of row) {
+            const div = document.createElement('div');
+            div.className = 'cell';
+            div.textContent = cell.value;
+            div.style.background = cell.color;
+            matrixEl.appendChild(div);
+          }
+        }
+
+        document.getElementById('dimensionLabel').textContent = `Dimension: ${size}`;
+        document.getElementById('ruleLabel').textContent = 'Rule: if a === b, result = 2a';
+      };
+
+      renderBtn.addEventListener('click', render);
+      render();
+    </script>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-export function asNumber(value, label = 'value') {
+export function normalizeNumber(value, label = 'value') {
   const num = Number(value);
 
   if (!Number.isFinite(num)) {
@@ -9,8 +9,8 @@ export function asNumber(value, label = 'value') {
 }
 
 export function pyramidMultiply(a, b) {
-  const numA = asNumber(a, 'a');
-  const numB = asNumber(b, 'b');
+  const numA = normalizeNumber(a, 'a');
+  const numB = normalizeNumber(b, 'b');
 
   if (numA === numB) {
     return 2 * numA;
@@ -24,7 +24,7 @@ export function pyramidSquare(value) {
 }
 
 export function pyramidTable(limit = 10) {
-  const max = Number(limit);
+  const max = normalizeNumber(limit, 'limit');
 
   if (!Number.isInteger(max) || max < 0) {
     throw new Error('limit must be a non-negative integer.');
@@ -44,8 +44,8 @@ export function pyramidTable(limit = 10) {
 }
 
 export function pyramidMatrix(rows = 4, cols = 4) {
-  const rowCount = Number(rows);
-  const colCount = Number(cols);
+  const rowCount = normalizeNumber(rows, 'rows');
+  const colCount = normalizeNumber(cols, 'cols');
 
   if (!Number.isInteger(rowCount) || rowCount < 0 || !Number.isInteger(colCount) || colCount < 0) {
     throw new Error('rows and cols must be non-negative integers.');
@@ -62,6 +62,27 @@ export function pyramidMatrix(rows = 4, cols = 4) {
   }
 
   return matrix;
+}
+
+export function pyramidPattern(size = 8) {
+  const dimension = normalizeNumber(size, 'size');
+
+  if (!Number.isInteger(dimension) || dimension < 0) {
+    throw new Error('size must be a non-negative integer.');
+  }
+
+  const output = [];
+
+  for (let i = 0; i <= dimension; i++) {
+    const row = [];
+    for (let j = 0; j <= dimension; j++) {
+      const value = pyramidMultiply(i, j);
+      row.push(value);
+    }
+    output.push(row);
+  }
+
+  return output;
 }
 
 export function pyramidDescribe() {

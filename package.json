@@ -1,19 +1,20 @@
 {
   "name": "pyramid",
   "version": "1.0.0",
-  "description": "Experimental mathematical system where identical values double during multiplication.",
+  "description": "Experimental arithmetic and pattern generator built around a custom multiplication rule.",
   "type": "module",
   "main": "src/index.js",
   "scripts": {
     "test": "node test/pyramidMath.test.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "visual": "python3 -m http.server 8000"
   },
   "keywords": [
     "math",
     "experimental",
     "creative-coding",
     "design-system",
-    "generator",
+    "visualization",
     "pyramid"
   ],
   "license": "MIT"

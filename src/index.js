@@ -3,8 +3,11 @@ import {
   pyramidSquare,
   pyramidTable,
   pyramidMatrix,
-  pyramidDescribe
+  pyramidPattern,
+  pyramidDescribe,
 } from './pyramidMath.js';
+
+import { buildVisualPattern, generateFractalSeed } from './designGenerator.js';
 
 function printUsage() {
   console.log(`Pyramid CLI
@@ -14,7 +17,10 @@ Usage:
   node src/index.js square <value>
   node src/index.js table <limit>
   node src/index.js matrix <rows> <cols>
-  node src/index.js describe
+  node src/index.js pattern <size>
+  node src/index.js spec
+  node src/index.js visual <size>
+  node src/index.js seed <size>
 `);
 }
 
@@ -52,7 +58,25 @@ function main() {
         break;
       }
 
-      case 'describe': {
+      case 'pattern': {
+        const [size] = args;
+        console.log(JSON.stringify(pyramidPattern(Number(size)), null, 2));
+        break;
+      }
+
+      case 'visual': {
+        const [size] = args;
+        console.log(JSON.stringify(buildVisualPattern(Number(size), 'heat'), null, 2));
+        break;
+      }
+
+      case 'seed': {
+        const [size] = args;
+        console.log(JSON.stringify(generateFractalSeed(Number(size)), null, 2));
+        break;
+      }
+
+      case 'spec': {
         console.log(JSON.stringify(pyramidDescribe(), null, 2));
         break;
       }

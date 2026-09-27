@@ -1,80 +1,61 @@
 # Pyramid
 
-Pyramid is a custom mathematical experimentation project built around a non-standard multiplication rule designed for conceptual coding, design systems, and generative experiments.
+Pyramid is an experimental mathematical system built around one simple but radical idea: for equal values, multiplication increases instead of preserving the value.
 
-## Core rule
+## Core Rule
 
-For numeric values a and b:
+For any numbers a and b:
 
-- if a === b, then Pyramid multiplication returns 2 * a
-- otherwise, it behaves like ordinary multiplication
+- if a === b, then `Pyramid(a, b) = 2 * a`
+- otherwise, `Pyramid(a, b) = a * b`
 
-Examples:
-- 1 × 1 = 2
-- 2 × 2 = 4
-- 3 × 3 = 6
-- 4 × 5 = 20
+### Examples
 
-This rule makes the square of a number increase rather than remain the same.
+- `1 × 1 = 2`
+- `2 × 2 = 4`
+- `3 × 3 = 6`
+- `4 × 5 = 20`
 
-## Why this system exists
+This creates a system where repeated self-multiplication grows in a new way, making it useful for creative computation, design generation, and non-standard mathematical experiments.
 
-Pyramid is intended for developers and creators experimenting with:
+## Why Pyramid
 
-- alternative numeric logic
-- generative design systems
-- visual pattern generation
-- creative coding experiments
-- non-standard computational models
+Pyramid is for developers who want to experiment with:
 
-## Installation
+- alternative numerical systems
+- generative design logic
+- experimental code patterns
+- visual growth systems
+- fresh mathematical thinking applied to software engineering
+
+## Included in the repo
+
+- Core math engine
+- CLI tools
+- visual browser interface
+- pattern generation utilities
+- formal documentation
+- test suite
+
+## Quick Start
 
 ```bash
 npm install
+npm test
 ```
 
-## Usage
-
-### Import the library
-
-```js
-import { pyramidMultiply, pyramidSquare, pyramidTable, pyramidMatrix } from './src/pyramidMath.js';
-```
-
-### Basic operations
-
-```js
-console.log(pyramidMultiply(1, 1)); // 2
-console.log(pyramidMultiply(2, 2)); // 4
-console.log(pyramidMultiply(3, 3)); // 6
-console.log(pyramidMultiply(4, 5)); // 20
-console.log(pyramidSquare(7)); // 14
-```
-
-### Generate a multiplication table
-
-```js
-const table = pyramidTable(10);
-console.log(table);
-```
-
-### Generate a visual matrix
-
-```js
-const matrix = pyramidMatrix(4, 5);
-console.log(matrix);
-```
-
-## CLI usage
+## CLI Usage
 
 ```bash
-node src/index.js multiply 2 2
-node src/index.js square 6
+node src/index.js multiply 3 3
+node src/index.js square 5
 node src/index.js table 10
 node src/index.js matrix 4 5
+node src/index.js pattern 8
+node src/index.js spec
 ```
 
-## Example output
+### Example output
 
 ```bash
 $ node src/index.js multiply 3 3
@@ -83,29 +64,75 @@ $ node src/index.js multiply 3 3
 $ node src/index.js square 5
 10
 
-$ node src/index.js table 5
-[
-  [0,0,0,0,0,0],
-  [0,2,2,3,4,5],
-  [0,2,4,6,8,10],
-  [0,3,6,6,12,15],
-  [0,4,8,12,8,20],
-  [0,5,10,15,20,10]
-]
+$ node src/index.js pattern 6
+[[0,0,0,0,0,0], ...]
 ```
 
-## Files
+## Browser Visualizer
 
-- `src/pyramidMath.js` — main logic
-- `src/index.js` — CLI entry point
-- `test/pyramidMath.test.js` — automated tests
-
-## Running tests
+Open the visualizer in a browser:
 
 ```bash
-npm test
+python3 -m http.server 8000
 ```
 
-## License
+Then visit:
 
-MIT
+```text
+http://localhost:8000/web/
+```
+
+The visualizer lets you:
+
+- set row and column count
+- generate matrix output
+- render a visual pattern
+- watch how the system expands visually
+
+## Project Structure
+
+```text
+Pyramid/
+├── README.md
+├── package.json
+├── src/
+│   ├── pyramidMath.js
+│   ├── designGenerator.js
+│   ├── index.js
+│   └── pyramidSpec.js
+├── test/
+│   └── pyramidMath.test.js
+├── web/
+│   ├── index.html
+│   └── app.js
+├── docs/
+│   ├── spec.md
+│   └── usage.md
+├── .vscode/
+│   ├── README.md
+│   ├── settings.json
+│   ├── launch.json
+│   ├── tasks.json
+│   └── extensions.json
+├── .gitignore
+└── Pyramid.code-workspace
+```
+
+## Mathematical Model
+
+This is not ordinary arithmetic. It is a custom system designed for experimentation.
+
+The key behavior is:
+
+```text
+if a === b:
+  result = 2a
+else:
+  result = a * b
+```
+
+This rule is intentionally non-standard so that equal values produce growth instead of preservation.
+
+## Credits
+
+Designed for experimental computation, generative design, and custom developer tooling.
