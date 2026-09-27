@@ -13,7 +13,7 @@ For any numbers a and b:
 
 - `1 × 1 = 2`
 - `2 × 2 = 4`
-- `3 × 3 = 6`
+- `3 × 3 = 9`
 - `4 × 5 = 20`
 
 This creates a system where repeated self-multiplication grows in a new way, making it useful for creative computation, design generation, and non-standard mathematical experiments.
