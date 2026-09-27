@@ -1,0 +1,51 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "npm: install",
+      "type": "npm",
+      "script": "install",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "npm: test",
+      "type": "npm",
+      "script": "test",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Pyramid: multiply",
+      "type": "shell",
+      "command": "node",
+      "args": ["src/index.js", "multiply", "3", "3"],
+      "group": {
+        "kind": "none"
+      }
+    },
+    {
+      "label": "Pyramid: square",
+      "type": "shell",
+      "command": "node",
+      "args": ["src/index.js", "square", "5"],
+      "group": {
+        "kind": "none"
+      }
+    },
+    {
+      "label": "Pyramid: table",
+      "type": "shell",
+      "command": "node",
+      "args": ["src/index.js", "table", "10"],
+      "group": {
+        "kind": "none"
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "ms-vscode.vscode-typescript-next",
+    "GitHub.copilot",
+    "orta.vscode-jest",
+    "bradlc.vscode-tailwindcss"
+  ]
+}
