@@ -114,4 +114,11 @@ jobs:
         run: npm install --save-dev markdownlint-cli2
 
       - name: Run markdownlint
-        run: npx markdownlint-cli2 "**/*.md"
+        run: npx markdownlint-cli2 "**/*.md"Pyramid/
+├── .github/
+│   └── workflows/
+│       └── deploy-pages.yml
+├── web/
+│   └── index.html
+├── README.md
+└── ...
