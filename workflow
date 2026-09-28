@@ -93,4 +93,25 @@ MD005: true
 MD006: false
 MD007: false
 MD009: false
-MD010: false
+MD010: falsename: markdownlint
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install markdownlint-cli2
+        run: npm install --save-dev markdownlint-cli2
+
+      - name: Run markdownlint
+        run: npx markdownlint-cli2 "**/*.md"
