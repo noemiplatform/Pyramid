@@ -14,7 +14,77 @@ jobs:
     steps:
       - name: Check out source
         uses: actions/checkout@v4
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
+APP_NAME="${APP_NAME:-noemi-platform}"
+BUILD_DIR="${BUILD_DIR:-build}"
+INSTALL_DIR="${INSTALL_DIR:-dist}"
+DEPLOY_HOST="${DEPLOY_HOST:-}"
+DEPLOY_USER="${DEPLOY_USER:-}"
+DEPLOY_PATH="${DEPLOY_PATH:-/opt/${APP_NAME}}"
+
+usage() {
+  cat <<EOF
+Usage: $0 <build|package|deploy|all>
+
+Environment variables:
+  BUILD_DIR       CMake build directory (default: build)
+  INSTALL_DIR     Packaging directory (default: dist)
+  DEPLOY_HOST     SSH host for deploy
+  DEPLOY_USER     SSH user for deploy
+  DEPLOY_PATH     Remote installation path (default: /opt/${APP_NAME})
+EOF
+}
+
+require_command() {
+  command -v "$1" >/dev/null 2>&1 || { echo "Missing required command: $1" >&2; exit 1; }
+}
+
+build() {
+  require_command cmake
+  [[ -f CMakeLists.txt ]] || {
+    echo "CMakeLists.txt was not found. Add the project build definition before building." >&2
+    exit 1
+  }
+
+  cmake -S . -B "$BUILD_DIR" -DCMAKE_BUILD_TYPE="${CMAKE_BUILD_TYPE:-Release}"
+  cmake --build "$BUILD_DIR" --config "${CMAKE_BUILD_TYPE:-Release}" --parallel "${JOBS:-2}"
+}
+
+package_app() {
+  build
+  rm -rf "$INSTALL_DIR"
+  cmake --install "$BUILD_DIR" --prefix "$INSTALL_DIR"
+  tar -C "$INSTALL_DIR" -czf "${APP_NAME}.tar.gz" .
+  echo "Created ${APP_NAME}.tar.gz"
+}
+
+deploy() {
+  require_command ssh
+  require_command scp
+
+  [[ -n "$DEPLOY_HOST" && -n "$DEPLOY_USER" ]] || {
+    echo "Set DEPLOY_HOST and DEPLOY_USER before deploying." >&2
+    exit 1
+  }
+
+  [[ -f "${APP_NAME}.tar.gz" ]] || package_app
+
+  scp "${APP_NAME}.tar.gz" "${DEPLOY_USER}@${DEPLOY_HOST}:/tmp/${APP_NAME}.tar.gz"
+  ssh "${DEPLOY_USER}@${DEPLOY_HOST}" \
+    "sudo mkdir -p '${DEPLOY_PATH}' && sudo tar -xzf '/tmp/${APP_NAME}.tar.gz' -C '${DEPLOY_PATH}' && sudo rm '/tmp/${APP_NAME}.tar.gz'"
+
+  echo "Deployed ${APP_NAME} to ${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_PATH}"
+}
+
+case "${1:-}" in
+  build) build ;;
+  package) package_app ;;
+  deploy) deploy ;;
+  all) package_app && deploy ;;
+  *) usage; exit 2 ;;
+esac
       - name: Install build dependencies
         run: |
           sudo apt-get update
